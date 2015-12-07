@@ -1496,7 +1496,7 @@ Rejects an incoming SIP MESSAGE (SMS-like) or audio/video call.
 */
 SIPml.Session.prototype.reject = function (o_conf) {
     this.setConfiguration(o_conf);
-    return this.o_session.reject();
+    return this.o_session.reject(i_code, i_status);
 }
 
 /**

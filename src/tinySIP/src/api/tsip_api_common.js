@@ -34,7 +34,7 @@ tsip_session.prototype.__action_handle = function(o_action){
 }
 
 // __action_any(e_action_type, ...)
-tsip_session.prototype.__action_any = function(e_action_type){
+tsip_session.prototype.__action_any = function(e_action_type, i_code, i_status){
 	/* Checks for validity */
 	if(!this.o_stack){
 		tsk_utils_log_error("Invalid stack");
@@ -49,12 +49,13 @@ tsip_session.prototype.__action_any = function(e_action_type){
 
 	/* execute action */
     var o_action = new tsip_action(e_action_type);
+    o_action.set_line_resp(i_code, i_status);
     return this.__action_handle(o_action);
 }
 
 // reject(...)
-tsip_session.prototype.reject = function () {
-    return this.__action_any(tsip_action_type_e.REJECT);
+tsip_session.prototype.reject = function (i_code, i_status) {
+    return this.__action_any(tsip_action_type_e.REJECT, i_code, i_status);
 }
 
 // hangup(...)
