@@ -432,6 +432,9 @@ tmedia_session_jsep01.onGetUserMediaSuccess = function (o_stream, _This) {
             return;
         }
 
+     if(This.my_mutex){tsk_utils_log_warn("onGetUserMediaSuccess already executed!"); return;}
+     This.my_mutex=true;
+
         if (o_stream) {
             // save stream other next calls
             if (o_stream.getAudioTracks().length > 0 && o_stream.getVideoTracks().length == 0) {
@@ -466,7 +469,7 @@ tmedia_session_jsep01.onGetUserMediaSuccess = function (o_stream, _This) {
                 tmedia_session_jsep01.mozThis ? tmedia_session_jsep01.onCreateSdpError : function (s_error) { tmedia_session_jsep01.onCreateSdpError(s_error, This); },
                 This.o_media_constraints,
                 false // createProvisionalAnswer
-             );
+            );
         }
         else {
             tsk_utils_log_info("createOffer");
@@ -647,9 +650,7 @@ tmedia_session_jsep01.prototype.__get_lo = function () {
             // stun.l.google.com: 173.194.78.127
             // stun.counterpath.net: 216.93.246.18
             // "23.21.150.121" is the default STUN server used in Nightly
-            o_iceServers = tmedia_session_jsep01.mozThis
-                ? [{ url: 'stun:23.21.150.121:3478' }, { url: 'stun:216.93.246.18:3478' }, { url: 'stun:66.228.45.110:3478' }, { url: 'stun:173.194.78.127:19302' }]
-                : [{ url: 'stun:stun.l.google.com:19302' }, { url: 'stun:stun.counterpath.net:3478' }, { url: 'stun:numb.viagenie.ca:3478' }];
+            o_iceServers = [];
         }
         try { tsk_utils_log_info("ICE servers:" + JSON.stringify(o_iceServers)); } catch (e) { }
         this.o_pc = new window.RTCPeerConnection(
